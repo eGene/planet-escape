@@ -6,4 +6,4 @@ Planet Escape is a shooter game built using reactjs and redux. To run:
 
 Then open http://localhost:3000
 
-(http://lampla.net "Live Demo")
+[Live Demo](http://lampla.net)
