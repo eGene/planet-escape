@@ -38,15 +38,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        astronaut: state.astronaut,
-        bonuses: state.bonuses,
-        enemies: state.enemies,
-        fires: state.fires,
-        obstacles: state.obstacles,
-        spaceship: state.spaceship,
-        stage: state.stage
-    }
+    return { ...state }
 }
 
 function mapDispatchToProps(dispatch) {

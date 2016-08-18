@@ -412,7 +412,7 @@ export default class Stage extends Component {
 
     startGame = (level = 1) => {
         const { stage, astronautActions, stageActions, enemies, bonuses, enemyActions, bonusActions } = this.props;
-        const settings = stage.settings.level[level];
+        const settings = stage.settings.levels[level];
         Object.keys(enemies).forEach(key => {
             enemyActions.die(key);
         });
@@ -426,7 +426,7 @@ export default class Stage extends Component {
 
     getStageSettings() {
         const { stage } = this.props;
-        return stage.settings.level[stage.level];
+        return stage.settings.levels[stage.level];
     }
 
     astronautIsOnObstacle() {
@@ -768,7 +768,7 @@ export default class Stage extends Component {
         if (this.tickers.enemies >= 250) {
             this.tickers.enemies = 0;
             const enemySettings = stageSettings.enemies[Math.floor(Math.random() * stageSettings.enemies.length)];
-            if (!astronaut.flyingSpaceship && Object.keys(enemies).filter(key => enemies[key].type === enemySettings.type).length < enemySettings.maxEnemies) {
+            if (enemySettings && !astronaut.flyingSpaceship && Object.keys(enemies).filter(key => enemies[key].type === enemySettings.type).length < enemySettings.maxEnemies) {
                 if (Math.random() < CONST.CHANCE.SPAWN_ENEMY) {
                     const key = Date.now();
                     enemyActions.spawn(key, {
@@ -965,9 +965,9 @@ export default class Stage extends Component {
                 setTimeout(() => {
                     astronautActions.spawn();
                     spaceshipActions.restart();
-                    if (stage.level < stage.maxLevel) {
+                    if (stage.level <= stage.maxLevel) {
                         const lastLevel = appState.getLastLevel();
-                        if (!lastLevel || lastLevel < stage.level + 1) {
+                        if (!lastLevel || lastLevel <= stage.level + 1) {
                             appState.setLastLevel(stage.level + 1);
                         }
                     }
@@ -976,7 +976,7 @@ export default class Stage extends Component {
                     if (prevCollectedGems.length <= collectedGems.length) {
                         appState.setLevelGems(stage.level, collectedGems);
                     }
-                    stageActions.nextLevel(astronaut.score, stage.settings.level[stage.level + 1]);
+                    stageActions.nextLevel(astronaut.score, stage.settings.levels[stage.level + 1]);
                     setTimeout(astronautActions.completeSpawning, 3000);
                 }, 5000);
             }
