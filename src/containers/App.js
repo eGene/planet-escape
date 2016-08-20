@@ -2,35 +2,20 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Stage from '../components/Stage'
-import * as stageActions from '../actions/StageActions'
 import * as astronautActions from '../actions/AstronautActions'
+import * as bonusActions from '../actions/BonusActions'
 import * as enemyActions from '../actions/EnemyActions'
 import * as fireActions from '../actions/FireActions'
 import * as spaceshipActions from '../actions/SpaceshipActions'
-import * as bonusActions from '../actions/BonusActions'
+import * as stageActions from '../actions/StageActions'
 
 class App extends Component {
 
     render() {
-        const { astronaut, enemies, fires, obstacles, spaceship, stage, bonuses } = this.props;
-        const { astronautActions, stageActions, enemyActions, fireActions, spaceshipActions, bonusActions } = this.props;
+        const { props } = this;
         return (
             <div className='stage-wrapper'>
-                <Stage
-                    astronaut={ astronaut }
-                    bonuses={ bonuses }
-                    enemies={ enemies }
-                    fires={ fires }
-                    obstacles={ obstacles }
-                    spaceship={ spaceship }
-                    stage={ stage }
-
-                    astronautActions={ astronautActions }
-                    bonusActions={ bonusActions }
-                    enemyActions={ enemyActions }
-                    fireActions={ fireActions }
-                    spaceshipActions={ spaceshipActions }
-                    stageActions={ stageActions } />
+                <Stage { ...props }/>
             </div>
         )
     }

@@ -50,6 +50,15 @@ table {
 
 /*end reset*/
 
+/* gradients */
+.purple-laser-gradient {
+  background: rgb(203,96,179);
+  background: -moz-linear-gradient(top,  rgba(203,96,179,1) 0%, rgba(193,70,161,1) 50%, rgba(168,0,119,1) 51%, rgba(219,54,164,1) 100%);
+  background: -webkit-linear-gradient(top,  rgba(203,96,179,1) 0%,rgba(193,70,161,1) 50%,rgba(168,0,119,1) 51%,rgba(219,54,164,1) 100%);
+  background: linear-gradient(to bottom,  rgba(203,96,179,1) 0%,rgba(193,70,161,1) 50%,rgba(168,0,119,1) 51%,rgba(219,54,164,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb60b3', endColorstr='#db36a4',GradientType=0 );
+}
+
 .flex-center() {
   display: flex;
   justify-content: center;
@@ -353,7 +362,7 @@ html, body {
     box-shadow: 0 0 5px 2px #55f;
   }
 
-  &.blue-laser, &.yellow-laser, &.shotgun {
+  &.blue-laser, &.yellow-laser, &.purple-laser, &.shotgun {
     background-color: #000;
     border-radius: 5px;
     box-shadow: 0 0 5px 1px #f77;
@@ -511,7 +520,7 @@ html, body {
   position: absolute;
   display: inline-block;
 
-  &.default-laser {
+  .default-laser {
     background: -moz-linear-gradient(left,  #f85032 0%, #f16f5c 50%, #f6290c 51%, #f02f17 71%, #e73827 100%);
     background: -webkit-linear-gradient(left,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
     background: linear-gradient(to right,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%);
@@ -520,7 +529,7 @@ html, body {
     box-shadow: 0px 0px 2px 2px #f00;
   }
 
-  &.blue-laser {
+  .blue-laser {
     background: -moz-linear-gradient(left,  #d0e4f7 0%, #73b1e7 24%, #0a77d5 50%, #539fe1 79%, #87bcea 100%);
     background: -webkit-linear-gradient(left,  #d0e4f7 0%,#73b1e7 24%,#0a77d5 50%,#539fe1 79%,#87bcea 100%);
     background: linear-gradient(to right,  #d0e4f7 0%,#73b1e7 24%,#0a77d5 50%,#539fe1 79%,#87bcea 100%);
@@ -529,7 +538,7 @@ html, body {
     box-shadow: 0px 0px 2px 2px #00f;
   }
 
-  &.yellow-laser {
+  .yellow-laser {
     background: #fceabb;
     background: -moz-linear-gradient(left,  #fceabb 0%, #fccd4d 40%, #f8b500 54%, #fbdf93 100%);
     background: -webkit-linear-gradient(left,  #fceabb 0%,#fccd4d 40%,#f8b500 54%,#fbdf93 100%);
@@ -539,7 +548,26 @@ html, body {
     box-shadow: 0px 0px 2px 2px #ff0;
   }
 
-  &.grit {
+  .purple-laser {
+    .purple-laser-gradient;
+    outline: 1px solid #f2f;
+    box-shadow: 0px 0px 2px 2px #f4f;
+    
+    &.exhausting {
+      opacity: 0;
+      transition: opacity 0.5s linear;
+    }
+  }
+  
+  .laser-appear-active {
+    &.purple-laser {
+      outline: 2px solid #fef;
+      box-shadow: 0px 0px 100px 10px #f4f;
+      transition: box-shadow 1s linear, outline 0.5s ease;
+    }
+  }
+
+  .grit {
     background: -moz-radial-gradient(center, ellipse cover,  rgba(255,251,145,1) 0%, rgba(240,47,23,1) 42%, rgba(241,111,92,1) 43%, rgba(244,64,39,1) 51%, rgba(246,41,12,0.92) 55%, rgba(231,56,39,0.02) 99%, rgba(231,56,39,0) 100%);
     background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,251,145,1) 0%,rgba(240,47,23,1) 42%,rgba(241,111,92,1) 43%,rgba(244,64,39,1) 51%,rgba(246,41,12,0.92) 55%,rgba(231,56,39,0.02) 99%,rgba(231,56,39,0) 100%);
     background: radial-gradient(ellipse at center,  rgba(255,251,145,1) 0%,rgba(240,47,23,1) 42%,rgba(241,111,92,1) 43%,rgba(244,64,39,1) 51%,rgba(246,41,12,0.92) 55%,rgba(231,56,39,0.02) 99%,rgba(231,56,39,0) 100%);

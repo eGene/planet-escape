@@ -39,6 +39,7 @@ export default class Bonus extends Component {
                         'medikit': data.key === CONST.BONUS.MEDIKIT.TYPE,
                         'blue-laser': data.key === CONST.BONUS.BLUE_LASER.TYPE,
                         'yellow-laser': data.key === CONST.BONUS.YELLOW_LASER.TYPE,
+                        'purple-laser': data.key === CONST.BONUS.PURPLE_LASER.TYPE,
                         'shield-1': data.key === CONST.BONUS.SHIELD_1.TYPE,
                         'shotgun': data.key === CONST.BONUS.SHOTGUN.TYPE
                     })

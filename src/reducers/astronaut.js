@@ -41,14 +41,14 @@ export default function astronaut(state = {}, action = {}) {
                 if (state.fuel > 0) {
                     payload.dx /= 2;
                 }
-                if (state.direction === 'rtl') {
+                if (state.direction === CONST.DIRECTION.TO_LEFT) {
                     if (payload.turn) {
-                        return { ...state, direction: 'ltr' };
+                        return { ...state, direction: CONST.DIRECTION.TO_RIGHT };
                     } else {
-                        return { ...state, xSpeed: Math.abs(state.maxXSpeed) > Math.abs(state.xSpeed) ? state.xSpeed + payload.dx : state.xSpeed, direction: 'rtl' };
+                        return { ...state, xSpeed: Math.abs(state.maxXSpeed) > Math.abs(state.xSpeed) ? state.xSpeed + payload.dx : state.xSpeed, direction: CONST.DIRECTION.TO_LEFT };
                     }
                 } else {
-                    return { ...state, xSpeed: state.maxXSpeed > state.xSpeed ? state.xSpeed + payload.dx : state.xSpeed, direction: 'ltr' };
+                    return { ...state, xSpeed: state.maxXSpeed > state.xSpeed ? state.xSpeed + payload.dx : state.xSpeed, direction: CONST.DIRECTION.TO_RIGHT };
                 }
             } else {
                 return state;
@@ -60,14 +60,14 @@ export default function astronaut(state = {}, action = {}) {
                 if (state.fuel > 0) {
                     payload.dx /= 2;
                 }
-                if (state.direction === 'ltr') {
+                if (state.direction === CONST.DIRECTION.TO_RIGHT) {
                     if (payload.turn) {
-                        return { ...state, direction: 'rtl' };
+                        return { ...state, direction: CONST.DIRECTION.TO_LEFT };
                     } else {
-                        return { ...state, xSpeed: Math.abs(state.maxXSpeed) > Math.abs(state.xSpeed) ? state.xSpeed - payload.dx : state.xSpeed, direction: 'ltr' };
+                        return { ...state, xSpeed: Math.abs(state.maxXSpeed) > Math.abs(state.xSpeed) ? state.xSpeed - payload.dx : state.xSpeed, direction: CONST.DIRECTION.TO_RIGHT };
                     }
                 } else {
-                    return { ...state, xSpeed: -state.maxXSpeed < state.xSpeed ? state.xSpeed - payload.dx : state.xSpeed, direction: 'rtl' };
+                    return { ...state, xSpeed: -state.maxXSpeed < state.xSpeed ? state.xSpeed - payload.dx : state.xSpeed, direction: CONST.DIRECTION.TO_LEFT };
                 }
             } else {
                 return state;
@@ -141,6 +141,7 @@ export default function astronaut(state = {}, action = {}) {
 
                 case CONST.BONUS.BLUE_LASER.TYPE:
                 case CONST.BONUS.YELLOW_LASER.TYPE:
+                case CONST.BONUS.PURPLE_LASER.TYPE:
                     return { ...state,
                             weapon: {
                                 type: CONST.BONUS[payload.key].TYPE,

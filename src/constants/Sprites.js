@@ -9,6 +9,7 @@ export const SPRITES = {
         HOMING_UFO: require('../img/sprites/enemies/ufo/homing-ufo.png'),
         BAT: require('../img/sprites/enemies/bat/bat.gif'),
         ICE: require('../img/sprites/enemies/ice/crystal.png'),
+        FLY: require('../img/sprites/enemies/fly/fly.gif'),
         ASTEROID_1: require('../img/sprites/enemies/asteroids/a-1.png'),
         ASTEROID_2: require('../img/sprites/enemies/asteroids/a-2.png'),
         ASTEROID_3: require('../img/sprites/enemies/asteroids/a-3.png'),
@@ -38,6 +39,7 @@ export const SPRITES = {
         GEM_4: require('../img/sprites/bonuses/gems/g-4.gif'),
         BLUE_LASER: require('../img/sprites/bonuses/blue_beam.png'),
         YELLOW_LASER: require('../img/sprites/bonuses/yellow_beam.png'),
+        PURPLE_LASER: require('../img/sprites/bonuses/purple_beam.png'),
         SHIELD_1: require('../img/sprites/bonuses/shield_1.png'),
         SHOTGUN: require('../img/sprites/bonuses/shotgun.png')
     },

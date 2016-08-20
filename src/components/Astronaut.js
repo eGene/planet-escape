@@ -31,7 +31,7 @@ export default class Stage extends Component {
                 height: data.height
             },
             astronaut: {
-                transform: data.live ? `scaleX(${data.direction === 'ltr' ? 1 : -1})` : `rotate(${360 * Math.random()}deg)`,
+                transform: data.live ? `scaleX(${data.direction === CONST.DIRECTION.TO_RIGHT ? 1 : -1})` : `rotate(${360 * Math.random()}deg)`,
                 width: data.width,
                 height: data.height,
                 opacity: data.spawning ? 0.5 : 1

@@ -1,9 +1,9 @@
 import { ACTIONS } from '../constants/Actions'
 
-export function fire(x, y, xSpeed, maxX, maxY, weapon) {
+export function fire(key, x, y, xSpeed, maxX, maxY, weapon) {
     return {
         type: ACTIONS.FIRE.FIRE,
-        payload: { key: Date.now(), x, y, xSpeed, maxX, maxY, weapon }
+        payload: { key, x, y, xSpeed, maxX, maxY, weapon }
     }
 }
 
@@ -32,5 +32,26 @@ export function collisionObstacle(key) {
     return {
         type: ACTIONS.FIRE.COLLISION_OBSTACLE,
         payload: { key }
+    }
+}
+
+export function exhaust(key) {
+    return {
+        type: ACTIONS.FIRE.EXHAUST,
+        payload: { key }
+    }
+}
+
+export function remove(key) {
+    return {
+        type: ACTIONS.FIRE.REMOVE,
+        payload: { key }
+    }
+}
+
+export function adjust(key, x, y, width) {
+    return {
+        type: ACTIONS.FIRE.ADJUST,
+        payload: { key, x, y, width }
     }
 }

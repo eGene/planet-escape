@@ -7,12 +7,25 @@ export default function fires(state = [], action) {
     let newState = Object.assign({}, state);
     if (iState || action.type === ACTIONS.FIRE.FIRE) {
         switch (action.type) {
+            case ACTIONS.FIRE.ADJUST:
+                if (typeof iState !== 'undefined' && iState !== null) {
+                    newState[payload.key].x = payload.x;
+                    newState[payload.key].y = payload.y;
+                    newState[payload.key].weapon.width = payload.width;
+                }
+                return newState;
+
+            case ACTIONS.FIRE.EXHAUST:
+                newState[payload.key].exhausting = true;
+                return newState;
+
             case ACTIONS.FIRE.COLLISION_OBSTACLE:
+            case ACTIONS.FIRE.REMOVE:
                 delete newState[payload.key];
                 return newState;
 
             case ACTIONS.FIRE.COLLISION_ENEMY:
-                if ([CONST.BONUS.BLUE_LASER.TYPE].indexOf(newState[payload.key].weapon.type) === -1) {
+                if ([CONST.BONUS.BLUE_LASER.TYPE, CONST.BONUS.PURPLE_LASER.TYPE].indexOf(newState[payload.key].weapon.type) === -1) {
                     delete newState[payload.key];
                 }
                 return newState;

@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react'
+import { CONST } from '../constants/Const';
 import $ from 'jquery'
 
 export default class Enemy extends Component {
@@ -28,7 +29,7 @@ export default class Enemy extends Component {
             width: this.state.width || data.width,
             height: this.state.height || data.height,
             opacity: data.spawning ? 0.5 : 1,
-            transform: `scaleX(${data.direction === 'ltr' ? -1 : 1})`
+            transform: `scaleX(${data.direction === CONST.DIRECTION.TO_RIGHT ? -1 : 1})`
         };
 
         if (!data.live && data.explode) {

@@ -5,6 +5,7 @@ export const CONST = {
         SPAWN_FUEL: 0.25,
         SPAWN_ENEMY: 0.1,
         BONUS: {
+            ALWAYS: 100,
             HALF: 0.5,
             QUARTER: 0.25,
             OFTEN: 0.1,
@@ -12,6 +13,11 @@ export const CONST = {
             RARE: 0.05,
             SUPER_RARE: 0.01
         }
+    },
+
+    DIRECTION: {
+        TO_RIGHT: 'ltr',
+        TO_LEFT: 'rtl'
     },
 
     SCORE: {
@@ -51,6 +57,14 @@ export const CONST = {
             WIDTH: 10,
             HEIGHT: 2,
             SPEED: 20
+        },
+        PURPLE_LASER: {
+            TYPE: 'PURPLE_LASER',
+            SPRITE: SPRITES.BONUS.PURPLE_LASER,
+            MAX_FIRES: 1,
+            WIDTH: 0,
+            HEIGHT: 4,
+            SPEED: 0
         },
         SHIELD_1: {
             TYPE: 'SHIELD_1',
@@ -123,6 +137,10 @@ export const CONST = {
         ICE: {
             TYPE: 'ICE',
             SPRITE: SPRITES.ENEMY.ICE
+        },
+        FLY: {
+            TYPE: 'FLY',
+            SPRITE: SPRITES.ENEMY.FLY
         },
         ASTEROID_1: {
             TYPE: 'ASTEROID_1',

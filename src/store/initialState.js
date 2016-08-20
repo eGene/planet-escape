@@ -2,6 +2,116 @@ import { SPRITES } from '../constants/Sprites';
 import { CONST } from '../constants/Const';
 
 const lives = 1;
+const stageWidth = window.innerWidth - 100;
+const stageHeight = window.innerHeight - 100;
+let obstacles = {
+    level: {
+        '1': {
+            static: [
+                {
+                    x: 10, y: 15, width: 20, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN,
+                    canHoldBonus: true
+                },
+                {
+                    x: 15, y: 40, width: 5, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN,
+                    canHoldBonus: true
+                },
+                {
+                    x: 80, y: 70, width: 10, height: 10,
+                    sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN,
+                    canHoldBonus: true
+                }
+            ]
+        },
+        '2': {
+            static: [
+                {
+                    x: 40, y: 20, width: 40, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.RED_ROCK,
+                    canHoldBonus: true
+                }
+            ]
+        },
+        '3': {
+            static: [
+                {
+                    x: 50, y: 15, width: 40, height: 2,
+                    sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1,
+                    canHoldBonus: true
+                },
+                {
+                    x: 50, y: 60, width: 40, height: 2,
+                    sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1,
+                    canHoldBonus: true
+                },
+                {
+                    x: 80, y: 50, width: 10, height: 1,
+                    sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1,
+                    canHoldBonus: true
+                },
+                {
+                    x: 80, y: 55, width: 10, height: 1,
+                    sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1,
+                    canHoldBonus: false
+                }
+            ]
+        },
+        '4': {
+            static: [
+                {
+                    x: 10, y: 80, width: 5, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.ICE_1,
+                    canHoldBonus: true
+                },
+                {
+                    x: 20, y: 80, width: 5, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.ICE_1,
+                    canHoldBonus: true
+                },
+                {
+                    x: 30, y: 80, width: 5, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.ICE_1,
+                    canHoldBonus: true
+                }
+            ]
+        },
+        '5': {
+            static: [
+                {
+                    x: 10, y: 15, width: 2, height: 70,
+                    sprite: SPRITES.OBSTACLE.BRICK.RED_ROCK,
+                    canHoldBonus: true
+                },
+                {
+                    x: 90, y: 15, width: 2, height: 70,
+                    sprite: SPRITES.OBSTACLE.BRICK.RED_ROCK,
+                    canHoldBonus: true
+                },
+                {
+                    x: 90, y: 90, width: 2, height: 5,
+                    sprite: SPRITES.OBSTACLE.BRICK.RED_ROCK,
+                    canHoldBonus: false
+                }
+            ]
+        }
+    }
+}
+
+Object.keys(obstacles.level).forEach(key => {
+    let level = obstacles.level[key];
+    level.static = level.static.map(o => {
+        return {
+            ...o,
+            x: stageWidth / 100 * o.x,
+            y: stageHeight / 100 * o.y,
+            width: stageWidth / 100 * o.width,
+            height: stageHeight / 100 * o.height
+        };
+    });
+});
+
 const levels = {
     '1': {
         level: 1,
@@ -144,13 +254,38 @@ const levels = {
         level: 5,
         background: require('../img/bg/bg_6.jpg'),
         enemies: [
+            {
+                type: CONST.ENEMY.ASTEROID_3.TYPE,
+                maxEnemies: 3, minSpeed: 3, maxSpeed: 5, damage: 3,
+                dieSprite: CONST.EXPLOSION.SMALL.SPRITE,
+                gemChance: CONST.CHANCE.BONUS.NORMAL
+            },
+            {
+                type: CONST.ENEMY.FLY.TYPE,
+                maxEnemies: 20, minSpeed: 3, maxSpeed: 3, damage: 3,
+                homingRadius: 150,
+                dieSprite: CONST.EXPLOSION.SMOKE.SPRITE
+            }
         ],
         bonuses: [
+            {
+                type: CONST.BONUS.MEDIKIT.TYPE,
+                chance: CONST.CHANCE.BONUS.NORMAL
+            },
+            {
+                type: CONST.BONUS.PURPLE_LASER.TYPE,
+                chance: CONST.CHANCE.BONUS.NORMAL
+            },
+            {
+                type: CONST.BONUS.SHIELD_1.TYPE,
+                chance: CONST.CHANCE.BONUS.NORMAL
+            }
         ]
     }
 };
 
-const initialState = {
+let initialState = {
+    obstacles,
     astronaut: {
         firing: false,
         sprite: {
@@ -158,7 +293,7 @@ const initialState = {
             moving: SPRITES.ASTRONAUT.MOVING
         },
         energy: 100,
-        direction: 'ltr',
+        direction: CONST.DIRECTION.TO_RIGHT,
         maxXSpeed: 10,
         maxYSpeed: 10,
         xSpeed: 0,
@@ -177,74 +312,6 @@ const initialState = {
     },
     bonuses: {},
     spaceship: {},
-    obstacles: {
-        level: {
-            '1': {
-                static: [
-                    {
-                        x: 100, y: 100, width: 100, height: 25,
-                        sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN
-                    },
-                    {
-                        x: 110, y: 300, width: 60, height: 60,
-                        sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN
-                    },
-                    {
-                        x: 600, y: 350, width: 100, height: 18,
-                        sprite: SPRITES.OBSTACLE.BRICK.GREY_GREEN
-                    }
-                ]
-            },
-            '2': {
-                static: [
-                    {
-                        x: 400, y: 150, width: 200, height: 30,
-                        sprite: SPRITES.OBSTACLE.BRICK.RED_ROCK
-                    }
-                ]
-            },
-            '3': {
-                static: [
-                    {
-                        x: 500, y: 100, width: 300, height: 20,
-                        sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1
-                    },
-                    {
-                        x: 500, y: 300, width: 300, height: 20,
-                        sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1
-                    },
-                    {
-                        x: 750, y: 260, width: 50, height: 5,
-                        sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1
-                    },
-                    {
-                        x: 750, y: 280, width: 50, height: 5,
-                        sprite: SPRITES.OBSTACLE.BRICK.ABSTRACT_1
-                    }
-                ]
-            },
-            '4': {
-                static: [
-                    {
-                        x: 100, y: 400, width: 50, height: 50,
-                        sprite: SPRITES.OBSTACLE.BRICK.ICE_1
-                    },
-                    {
-                        x: 200, y: 400, width: 50, height: 50,
-                        sprite: SPRITES.OBSTACLE.BRICK.ICE_1
-                    },
-                    {
-                        x: 300, y: 400, width: 50, height: 50,
-                        sprite: SPRITES.OBSTACLE.BRICK.ICE_1
-                    }
-                ]
-            },
-            '5': {
-                static: [
-                ]
-            }
-        }
-    },
     enemies: {},
     fires: {},
     stage: {
@@ -277,8 +344,8 @@ const initialState = {
             lives,
             levels
         },
-        width: 1024,
-        height: 600,
+        width: stageWidth,
+        height: stageHeight,
         gameStarted: false,
         gameOver: false,
         paused: false,

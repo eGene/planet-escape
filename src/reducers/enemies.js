@@ -17,7 +17,7 @@ export default function enemies(state = [], action) {
                     newState[payload.key].ySpeed = newState[payload.key].ySpeed > 0 ? newState[payload.key].maxSpeed : -newState[payload.key].maxSpeed;
                 }
             }
-            newState[payload.key].direction = newState[payload.key].xSpeed > 0 ? 'ltr' : 'rtl';
+            newState[payload.key].direction = newState[payload.key].xSpeed > 0 ? CONST.DIRECTION.TO_RIGHT : CONST.DIRECTION.TO_LEFT;
             return newState;
 
         case ACTIONS.ENEMY.COLLISION_FIRE:
@@ -33,7 +33,7 @@ export default function enemies(state = [], action) {
                 if (payload.x) {
                     newState[payload.key].xSpeed = Number(-iState.xSpeed);
                     newState[payload.key].x += Number(iState.xSpeed);
-                    newState[payload.key].direction = newState[payload.key].direction === 'ltr' ? 'rtl' : 'ltr';
+                    newState[payload.key].direction = newState[payload.key].direction === CONST.DIRECTION.TO_RIGHT ? CONST.DIRECTION.TO_LEFT : CONST.DIRECTION.TO_RIGHT;
                 }
                 if (payload.y) {
                     newState[payload.key].ySpeed = -iState.ySpeed;
@@ -51,7 +51,7 @@ export default function enemies(state = [], action) {
                 live: true,
                 x: 10,
                 y: 0,
-                direction: xSpeed < 0 ? 'rtl' : 'ltr',
+                direction: xSpeed < 0 ? CONST.DIRECTION.TO_LEFT : CONST.DIRECTION.TO_RIGHT,
                 xSpeed,
                 ySpeed,
                 sprite: CONST.ENEMY[payload.type].SPRITE,
@@ -83,7 +83,7 @@ export default function enemies(state = [], action) {
                     height: payload.height,
                     xSpeed: iState.xSpeed ? iState.xSpeed : 5,
                     ySpeed: iState.ySpeed ? iState.ySpeed : 5,
-                    direction: iState.xSpeed ? iState.direction : 'ltr'
+                    direction: iState.xSpeed ? iState.direction : CONST.DIRECTION.TO_RIGHT
                 });
             }
             return newState;

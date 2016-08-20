@@ -13,6 +13,37 @@ import $ from 'jquery'
 
 const GAME_ENGINE_INTERVAL = 10;
 
+function getNearestObstacle(obstacles, astronaut) {
+    let nearestObstacleIdx = null;
+    let nearestObstacleDistance = null;
+    for (let iObstacle = 0; iObstacle < obstacles.length; iObstacle++) {
+        const o = obstacles[iObstacle];
+        const dist = distance(o, astronaut);
+        if (astronaut.direction === CONST.DIRECTION.TO_RIGHT) {
+            if (o.x > astronaut.x + astronaut.width && astronaut.y + astronaut.height / 2 > o.y && astronaut.y + astronaut.height / 2 < o.y + o.height) {
+                if (nearestObstacleDistance === null || nearestObstacleDistance > dist) {
+                    nearestObstacleDistance = dist;
+                    nearestObstacleIdx = iObstacle;
+                }
+            }
+        } else {
+            if (o.x < astronaut.x && astronaut.y + astronaut.height / 2 > o.y && astronaut.y + astronaut.height / 2 < o.y + o.height) {
+                if (nearestObstacleDistance === null || nearestObstacleDistance > dist) {
+                    nearestObstacleDistance = dist;
+                    nearestObstacleIdx = iObstacle;
+                }
+            }
+        }
+    }
+    return nearestObstacleIdx !== null ? obstacles[nearestObstacleIdx] : null;
+}
+
+function distance(rect1, rect2) {
+    const dx = Math.pow(rect1.x + rect1.width / 2 - (rect2.x + rect2.width / 2), 2);
+    const dy = Math.pow(rect1.y + rect1.height / 2 - (rect2.y + rect2.height / 2), 2);
+    return Math.sqrt(dx + dy);
+}
+
 function isCollision(rect1, rect2) {
     return !(rect1.x > rect2.x + rect2.width || rect1.x + rect1.width < rect2.x || rect1.y > rect2.y + rect2.height || rect1.y + rect1.height < rect2.y);
 }
@@ -146,11 +177,11 @@ export default class Stage extends Component {
                                 type={ this.spaceshipType }
 
                                 spaceshipActions={ spaceshipActions } />
-                            { Object.keys(enemies).length && this.renderEnemies() }
-                            { Object.keys(fires).length && this.renderFires() }
-                            { Object.keys(bonuses).length && this.renderBonuses() }
-                            { stage.level > 0 && obstacles.level[stage.level] && obstacles.level[stage.level].static.length && this.renderObstacles() }
-                            { this.enableTouch && this.renderTouchControls() }
+                            { Object.keys(enemies).length ? this.renderEnemies() : null }
+                            { Object.keys(fires).length ? this.renderFires() : null }
+                            { Object.keys(bonuses).length ? this.renderBonuses() : null }
+                            { (stage.level > 0 && obstacles.level[stage.level] && obstacles.level[stage.level].static.length) ? this.renderObstacles() : null }
+                            { this.enableTouch ? this.renderTouchControls() : null }
                         </div> 
                 }
                 { stage.gameComplete && this.renderGameCompleteScreen() }
@@ -617,12 +648,15 @@ export default class Stage extends Component {
     }
 
     moveFire(key, fire) {
-        const { fireActions, obstacles, stage } = this.props;
+        const { astronaut, fireActions, stage } = this.props;
+        let { obstacles } = this.props;
         let hasXCollision = false;
         let hasYCollision = false;
 
-        for (let i = 0; i < obstacles.level[stage.level].static.length && !(hasXCollision && hasYCollision); i++) {
-            const o = obstacles.level[stage.level].static[i];
+        obstacles = obstacles.level[stage.level].static;
+
+        for (let i = 0; i < obstacles.length && !(hasXCollision && hasYCollision); i++) {
+            const o = obstacles[i];
             let e;
 
             if (fire.xSpeed) {
@@ -661,6 +695,29 @@ export default class Stage extends Component {
         if (fire.ySpeed && !hasYCollision) {
             fireActions.moveY(key, fire.ySpeed);
         }
+
+        if (fire.weapon.type === CONST.BONUS.PURPLE_LASER.TYPE) {
+            let newWidth, newX, newY;
+            const nearestObstacle = getNearestObstacle(obstacles, astronaut);
+            if (astronaut.direction === CONST.DIRECTION.TO_RIGHT) {
+                if (nearestObstacle !== null) {
+                    newWidth = nearestObstacle.x - astronaut.x - astronaut.width;
+                } else {
+                    newWidth = stage.width - astronaut.x - astronaut.width;
+                }
+                newX = astronaut.x + astronaut.width;
+            } else {
+                if (nearestObstacle !== null) {
+                    newX = nearestObstacle.x + nearestObstacle.width;
+                    newWidth = astronaut.x - newX;
+                } else {
+                    newWidth = astronaut.x;
+                    newX = 0;
+                }
+            }
+            newY = astronaut.y + astronaut.height / 2 + 4 - fire.weapon.height / 2;
+            fireActions.adjust(key, newX, newY, newWidth);
+        }
     }
 
     handleMoveTicker() {
@@ -677,9 +734,7 @@ export default class Stage extends Component {
                 this.moveEnemy(key, enemy);
                 if (typeof enemy.homingRadius !== 'undefined') {
                     const { homingRadius } = enemy;
-                    const dx = Math.pow(astronaut.x + astronaut.width / 2 - (enemy.x + enemy.width / 2), 2);
-                    const dy = Math.pow(astronaut.y + astronaut.height / 2 - (enemy.y + enemy.height / 2), 2);
-                    if (Math.sqrt(dx + dy) < homingRadius) {
+                    if (distance(astronaut, enemy) < homingRadius) {
                         const vx = astronaut.x + astronaut.width / 2 - (enemy.x + enemy.width / 2);
                         const vy = astronaut.y + astronaut.height / 2 - (enemy.y + enemy.height / 2);
                         const vector = normalize({x: vx, y: vy}, 1);
@@ -705,9 +760,12 @@ export default class Stage extends Component {
         const defaultRayHeight = 1;
         const defaultRaySpeed = 20;
 
-        const rayWidth = astronaut.weapon.width || defaultRayWidth;
-        const rayHeight = astronaut.weapon.height || defaultRayHeight;
-        const raySpeed = astronaut.weapon.speed || defaultRaySpeed;
+        let { obstacles } = this.props;
+        let rayWidth = astronaut.weapon.width || defaultRayWidth;
+        let rayHeight = astronaut.weapon.height || defaultRayHeight;
+        let raySpeed = astronaut.weapon.speed || defaultRaySpeed;
+
+        obstacles = obstacles.level[stage.level].static.filter(o => o.canHoldBonus);
 
         if (this.tickers.key >= 100) {
             this.tickers.key = 0;
@@ -719,16 +777,49 @@ export default class Stage extends Component {
             this.holdingRight && !astronaut.flyingSpaceship && !this.astronautIsOnLeftFromObstacle() && astronautActions.incXSpeed();
             this.holdingDown && !astronaut.flyingSpaceship && (astronaut.y < astronaut.maxY - astronaut.height && astronaut.y > 0 && !this.astronautIsOnObstacle()) && astronautActions.decYSpeed();
             if (this.holdingSpace && !astronaut.flyingSpaceship && astronaut.live && Object.keys(fires).length < astronaut.weapon.maxFires) {
+                let weapon = Object.assign({}, astronaut.weapon);
+                let rayX = astronaut.x + (astronaut.direction === CONST.DIRECTION.TO_RIGHT ? astronaut.width : -rayWidth);
+                const fireKey = Date.now();
+                if (weapon.type === CONST.BONUS.PURPLE_LASER.TYPE) {
+                    const nearestObstacle = getNearestObstacle(obstacles, astronaut);
+                    if (astronaut.direction === CONST.DIRECTION.TO_RIGHT) {
+                        if (nearestObstacle !== null) {
+                            rayWidth = nearestObstacle.x - astronaut.x - astronaut.width;
+                        } else {
+                            rayWidth = stage.width - astronaut.x - astronaut.width;
+                        }
+                        rayX = astronaut.x + astronaut.width;
+                    } else {
+                        if (nearestObstacle !== null) {
+                            rayX = nearestObstacle.x + nearestObstacle.width;
+                            rayWidth = astronaut.x - rayX;
+                        } else {
+                            rayWidth = astronaut.x;
+                            rayX = 0;
+                        }
+                    }
+                    raySpeed = weapon.speed;
+                    setTimeout(() => {
+                        fireActions.exhaust(fireKey)
+                    }, 500);
+                    setTimeout(() => {
+                        fireActions.remove(fireKey)
+                    }, 1200);
+                } else {
+                    weapon.width = rayWidth;
+                }
+                weapon.height = rayHeight;
                 fireActions.fire(
-                    astronaut.x + (astronaut.direction === 'ltr' ? astronaut.width : -rayWidth),
-                    astronaut.y + astronaut.height / 2 + 2,
-                    astronaut.direction === 'ltr' ? raySpeed : -raySpeed,
+                    fireKey,
+                    rayX,
+                    astronaut.y + astronaut.height / 2 + 4 - weapon.height / 2,
+                    astronaut.direction === CONST.DIRECTION.TO_RIGHT ? raySpeed : -raySpeed,
                     stage.width,
                     stage.height,
-                    Object.assign({}, astronaut.weapon, { width: rayWidth, height: rayHeight })
+                    weapon
                 );
-                if (astronaut.weapon.type === CONST.BONUS.SHOTGUN.TYPE) {
-                    if (astronaut.direction === 'ltr') {
+                if (weapon.type === CONST.BONUS.SHOTGUN.TYPE) {
+                    if (astronaut.direction === CONST.DIRECTION.TO_RIGHT) {
                         astronautActions.decXSpeed(false);
                     } else {
                         astronautActions.incXSpeed(false);
@@ -794,7 +885,7 @@ export default class Stage extends Component {
         const { bonuses, bonusActions, spaceship, stage } = this.props;
         let { obstacles } = this.props;
 
-        obstacles = obstacles.level[stage.level].static;
+        obstacles = obstacles.level[stage.level].static.filter(o => o.canHoldBonus);
 
         if (this.tickers.bonuses >= 1000) {
             this.tickers.bonuses = 0;
@@ -833,7 +924,7 @@ export default class Stage extends Component {
         const stageSettings = this.getStageSettings();
         let { obstacles } = this.props;
 
-        obstacles = obstacles.level[stage.level].static;
+        obstacles = obstacles.level[stage.level].static.filter(o => o.canHoldBonus);
 
         stageSettings.bonuses.forEach(bonus => {
             const key = bonus.type;
