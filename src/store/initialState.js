@@ -256,7 +256,7 @@ const levels = {
         enemies: [
             {
                 type: CONST.ENEMY.ASTEROID_3.TYPE,
-                maxEnemies: 3, minSpeed: 3, maxSpeed: 5, damage: 3,
+                maxEnemies: 2, minSpeed: 3, maxSpeed: 5, damage: 3,
                 dieSprite: CONST.EXPLOSION.SMALL.SPRITE,
                 gemChance: CONST.CHANCE.BONUS.NORMAL
             },

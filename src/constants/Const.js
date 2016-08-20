@@ -3,7 +3,7 @@ import { SPRITES } from './Sprites';
 export const CONST = {
     CHANCE: {
         SPAWN_FUEL: 0.25,
-        SPAWN_ENEMY: 0.1,
+        SPAWN_ENEMY: 0.2,
         BONUS: {
             ALWAYS: 100,
             HALF: 0.5,

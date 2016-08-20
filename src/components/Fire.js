@@ -35,7 +35,7 @@ export default class Fire extends Component {
 
         return (
             <div ref='fire' className='laser-ray' style={ styles }>
-                <ReactCSSTransitionGroup transitionName='laser' component='div' transitionAppear={true} transitionAppearTimeout={1500} transitionEnterTimeout={0} transitionLeaveTimeout={0}>
+                <ReactCSSTransitionGroup style={{width: data.weapon.width, height: data.weapon.height}} transitionName='laser' component='div' transitionAppear={true} transitionAppearTimeout={1500} transitionEnterTimeout={0} transitionLeaveTimeout={0}>
                     <div key={ data.key } className={ cx(classes, { 'exhausting': data.exhausting }) } />
                 </ReactCSSTransitionGroup>
             </div>
