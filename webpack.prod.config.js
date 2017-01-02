@@ -6,7 +6,6 @@ var precss = require('precss');
 
 module.exports = {
   entry: [
-    'webpack-hot-middleware/client',
     'babel-polyfill',
     './src/index'
   ],
@@ -16,8 +15,10 @@ module.exports = {
     publicPath: '/public/'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new NpmInstallPlugin()
   ],
   module: {

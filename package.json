@@ -9,6 +9,16 @@
   },
   "author": "Evgeny Masibut",
   "license": "MIT",
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": [
+          "transform-react-constant-elements",
+          "transform-react-inline-elements"
+        ]
+      }
+    }
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
     "babel-core": "^6.4.5",
@@ -32,7 +42,6 @@
     "npm-install-webpack-plugin": "^2.0.2",
     "postcss-loader": "^0.8.0",
     "precss": "^1.4.0",
-    "react-hot-loader": "^1.3.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.12",
@@ -44,10 +53,10 @@
     "babel-runtime": "^6.3.19",
     "material-ui": "^0.15.3",
     "react": "^15.3.0",
-    "react-dom": "^0.14.8",
+    "react-dom": "^15.4.1",
     "react-redux": "^4.0.6",
+    "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.0.6",
-    "redux-auth": "0.0.5-beta5",
-    "react-tap-event-plugin": "^1.0.0"
+    "redux-auth": "0.0.5-beta5"
   }
 }

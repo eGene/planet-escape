@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import ReactCSSTransitionGroup from'react-addons-css-transition-group';
 import cx from 'classnames'
-import { CONST } from '../constants/CONST';
+import { CONST } from '../constants/Const';
 
 export default class Fire extends Component {
 
